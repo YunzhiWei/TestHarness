@@ -1,0 +1,19 @@
+! -----------------------------------------------------------------------
+! INTEL CORPORATION MAKES NO WARRANTY OF ANY KIND WITH REGARD TO THIS
+! MATERIAL, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+! MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+! INTEL CORPORATION ASSUMES NO RESPONSIBILITY FOR ANY ERRORS THAT MAY
+! APPEAR IN THIS DOCUMENT. INTEL CORPORATION MAKES NO COMMITMENT TO
+! UPDATE NOR TO KEEP CURRENT THE INFORMATION CONTAINED IN THIS DOCUMENT.
+! -----------------------------------------------------------------------
+
+
+!! LOAD bbu BINARY FILE
+
+   load/bin/address =0x5C020000 of "D:\_Project\TestHarness\Program\Embedded\TestHarness\_out\b"
+   Set reg PC =0x5C020000
+ 
+!!set option /memory=byte
+
+!!del exc /all
+!!set module start.s

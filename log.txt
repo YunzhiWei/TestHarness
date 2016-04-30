@@ -1,0 +1,284 @@
+
+*. FAT has BUG!!! The Cluster Catch is used both in File read and Dir operation. So, File read will crash the data for current dir operation
+*. When working as MOBM, after update MOBM, the UUID may not be same as before. This cause the Windows Mobile PIN code incorrect.
+
+.  USB Disk --> SD card
+.  USB Mass Storage --- Multi-Disk
+.  SD --- check return value
+.  DA9034 Charging, LED, Flash, Vibrator
+.  Audio Record, FM, Motion Sensor,
+.  Correct PrepareUUID
+.  Seprate Font, Welcome Logo, PIN setting from Image
+.  try PXA310 USB Boot support
+.  Bad Block Table intial (BadBlock Scan)
+.  Bad Block Optimize
+.  DMA
+.  FAT32
+
+Ver 020  ----  Copy from Ver 019
+
+1. Fix compile error for Gryphus
+2. Update struct defination and source code for USB according to USB spec
+
+Ver 019  ----  Copy from Ver 018
+
+1. Add USB serial debug function
+2. Optimize USB Serial & U2D
+3. Add FIFO module
+4. Update USB Serial, add USB Serial Test in Main
+5. Update Makefile
+6. Update U2D, USBDisk, USBMSSync, USBSerial to support dynamic debugging output through UART or USB Serial
+7. Update Debug, Menu, xModem, _Platform to support both UART & USB Serial
+8. Update OnMenuIdle in Event according to Menu update
+9. Update Event to Support USB Serial 'Open' and 'Close'
+10.Update Main and Startup to support the updates
+11.Add U2D_Disconnect in U2D
+12.Fix USBSerial bug and related modules
+13.Update U2D and related modules to be prepared for complex USB device
+14.Add USBComposite
+15.Add USB drivers for PC
+16.Include MS Sync function in USBComposite, and add USB MS Sync driver for PC
+17.Update struct defination in SB.h to optimize the USB devices drivers in BSP
+
+Ver 018  ----  Copy from Ver 017
+
+1. Fix bug in U2D_OnConfDescriptor: parameter length should be [7][6] not [6] only
+2. Divid current U2D function into U2D and USBDisk
+3. m_bMaxPower in g_ConfigDescriptorUDisk is changed to 0x00
+4. Add USBMSSync
+5. Update Audio
+6. Fix writing error in _MemoryMap_EXE_at_SDRAM.h
+7. Add _Cooperate_compatible.h
+8. Add PlatformModules.h in each Platform and mode some #include from _Platform.h to PlatformModules.h
+9. Update Keypad and related modules.
+10.Add _StructType_PXA3XX.h: move some code from LCD, QCI & UART to this file. Include this file in each Platform.h
+11.Update Startup, Main, FileSys & Event to make it easy to switch between Gryphus and Zylonite
+12.Update Main to support dynamic switch USB function between USB Disk and MS Sync
+13.Rename UPD_BurnFileNB0 to UPD_BurnFileRAWDATA
+14.Support CE NK.NB0 format
+15.Update U2D to make U2D support more USB function device with compatible
+16.Update tExecuteNKNB0 in FileSys to correct Jump Address for NB0
+17.Update U2D to support USB Serial
+18.Add USB Serial
+
+Ver 017  ----  Copy from Ver 016
+
+1. Update PMIC: Audio Related Functions & BUCK_SLEEP initial setting
+2. Update Audio
+3. Update Camera: add and use Camera_MT9M111_BSP.c
+4. Update GPIO_Function in S68P
+5. Update Touch and related functions in PMIC
+6. Update Touch function in PMIC, Add tTouchPolling in Main
+7. Update RTC and related caller functions
+8. Add StreamOut, Update Debug module and related caller functions
+9. Replace some DBG_XXX with MY_XXX to display on screen
+10.Support USB Cable detect: PMIC, Event
+
+Ver 016  ----  Copy from Ver 015
+
+1. Timer: Add Timer_Start & Timer_Stop
+2. Support Turn OFF device by ON Key
+3. Update Event
+4. Update GPIO_Function in Gryphus & S68P
+5. Update Menu
+6. Add Touch & Update PMIC
+7. Delete tBurn in FileSys
+8. Update Flash Layout
+9. Rename AutoBurn to AutoBatch
+10.Welcome Logo support & "SCR" file type support
+11.Update Memory Map & link.lds
+12.Do not set USB Host & MVED clock when startup
+13.Update REG_CKENx_SETTING in each Platform.h
+14.Add QCI, Camera, Audio & related functions in PMIC
+15.Fix bug for MOBM mode: do not invoke RTC_Initial in startup for MOBM mode
+
+Ver 015  ----  Copy from Ver 014
+
+1. Add Modem & PowerManager
+2. MMCSD: 4bit mode support
+3. Add I2C in BSP
+4. Add PMIC module
+5. Full MOBM functions: GotoSleep, CheckCondition
+6. Update Resuming Address in Start.s according to WM memory map
+7. Workarround for PIN bug: update definations for MFPR_FUNC_EDGE_DETECT_XXXX
+8. Update Memory Map!!!
+9. Update modules for prompt on display
+10.Move MMUSetup from Startup to MMU module and update PowerManager
+11.Add Error Code for I2C & PMIC
+12.Add PMIC handler in GPIO interrupt handle
+13.Update Event
+14.Update start.s for memory map update and memory space checking
+15.Set clock according to Platform
+16.Update PIN_Setting in Gryphus for Power Consumption
+17.Update PMIC and Startup to lower the Power Consumption in Sleep mode
+18.Move PMIC from Program to BSP
+19.Update PMIC for multi platform
+20.Add PrepareUUID process for BSP UUID
+21.Check Platform ID for MOBM update: start.s, startup.c, Update module
+22.Update CRC1021 to avoid access overflow
+23.Update DA9034_POWER_ENABLE_SET1
+24.Update Panel in BSP and add Panel_Function in Platform
+25.Update _DA9034_Reg.h
+26.Update _RegBit_PXA3xx.h
+27.Update PMIC
+28.Update files in Platforms
+29.Support S68P MOBM
+
+Ver 014  ----  Copy from Ver 013
+
+1. Add console module
+2. Replace some DBG_TraceXXXX with MY_TraceXXXX
+3. Add Panel
+4. Update FBFunction and Public
+5. Update GPIO_Function in Gryphus
+6. Update Memory Map for Frame Buffer
+7. Select Font based on the Screen resolution
+8. Remark LCD_Disable for MOBM
+9. Test LCD bug
+
+Ver 013  ----  Copy from Ver 012
+
+1. Add FBFunction and Font_xxx in common
+2. Add LCD and PWM modules
+3. Move XXX_DMA_Descriptor from _type.h to modules
+4. Update Platform.h in Zylonite
+5. Update _Platform.h
+6. Update Keypad: move keypad table out
+7. Update Makefile to simplify platform switch
+8. Create Program folder
+9. Move several files from BSP to Program
+10.Set Program as 'Source' and BSP as 'lib' (add makefile for BSP)
+11.Move FAL from common to BSP to avoid link error ???
+
+Ver 012  ----  Copy from Ver 011
+
+1. Move FAL & FAT from BSP to common
+2. Update MMUTableSetup.
+3. Add MMUSetup in startup.c
+4. Move MMU from BSP to common.
+5. Call MMUSetup instead of MMUTableSetup
+6. Add Suspend/Resume support in start.s
+7. Add GotoTarget & FindOutWhere2Go in startup.c
+8. Add Keypad module
+9. Change PIN_Setting for S68P
+10.Update Platform in each platform.
+11.Move RAMDisk from BSP to common.
+
+Ver 011  ----  Copy from Ver 010
+
+1. Fit bug in FAT
+2. Add UPD_BurnFileNB0 in Update
+3. Update FileSys
+4. Update defination in BBM and Flash
+5. Update: Remove TEST_CHECK_MODE; Move check sum to Pulic; Erase All blocks before write; Do not check each Block ID
+6. Update Nand_ReadSector
+7. Error Code type from U32 to int. Collect all Error Code into _ErrCode.h
+8. Re-define the Error Code
+9. Makefile: Use 'ar' command to archive obj into lib
+
+Ver 010  ----  Copy from Ver 009
+
+1. Support 'NB0', 'BIN', 'EXT' format
+2. Burn File from SD card
+3. Update FAT: support different kinds of SD card format
+4. Add Format RAM disk function and format Disk before enable USB.
+5. Add Event module
+6. Support MMC/SD card insert detect for Gryphus
+7. Support MOBM & TESTER auto-burn
+8. Update MMC/SD: Fix bug, prevent do-loop, change return error code. And related files.
+9. Add INT_Initial in Start up process, and remove it from main menu.
+
+Ver 009  ----  Copy from Ver 008
+
+1. Optimize GPIO: divid into GPIO common and GPIO platform
+2. Update Update module for those RAW data blocks in BIN file
+3. Optimize MMCSD and related files
+4. Include U2D or UDC according to processor type
+5. Add FS_OnEject and remove FS_BurnFile
+6. Update FAT for SD card operation
+7. Optimize Menu and related files
+8. Update FAT to support dynamic change target Block Device
+9. Update FAT for those disk which the Logic Sector 0 is not the Physical Sector 0
+
+Ver 008  ----  Copy from Ver 007
+
+1. Add Zylonite Platform, and change platform to Zylonite
+2. Add folders in 'Platform' folder for individual Platform
+3. Move files into individual Platform folder and Rename files' name
+4. Add incpath for makefile (both project and common lib)
+5. Add S68P Platform, and change platform to S68P
+6. Add S68P folder in 'Platform' folder
+7. Add PLATFORM_NAME in config, and use it in each 'incpath' file
+   (When I modify only one 'incpath' file and forget another one, a bug takes me a lot of time)
+8. Add UDC module and enable it for S68P
+9. Arrange memory map and optimize FAT, MMU and start.s
+
+Ver 007  ----  Copy from Ver 006
+
+1. Fix bug in Update
+2. Optimize Update module and related files
+3. Update Menu to support MainLoop
+4. Add MainLoop in Main.c and add Main.h in Platform
+5. Add event process in Main
+6. SetEvent when U2D START/STOP event
+
+Ver 006  ----  Copy from Ver 005
+
+1. Optimize VT100 and move it to common
+2. Update MMU
+3. Update NAND, Flash, Update, BBM modules
+4. Update related files based on step 2
+5. Add FAL module
+6. Enable IRQ & FIQ in SVC mode
+7. Do not enter System mode in BSP (start.s)
+8. Entern System mode in APP common/start.s (loader) (Did not test)
+9. Add BurnFileBin in FileSys adn Use 64M RAM disk to test
+10.Enable U2D & Interrupt when needed
+
+Ver 005  ----  Copy from Ver 004
+
+1. Add Memory dump in main
+2. Change MMU table to support 128M DDR RAM
+3. Add RTC & SSP module & VT100
+4. Add MemManager source, but not finished yet.
+5. Rewrite FAT module
+6. Add FileSys module
+7. Optimize RAMDisk
+8. Optimize PIN module and MFPR related source files
+9. Update API entrance and APP and makefile
+
+Ver 004  ----  Copy from Ver 003
+
+1. Add MMCSD module
+2. Modify '#endif' sentences to clear compile warnings.
+3. Add U2D module
+4. Add FAT module
+5. Optimize Makefile
+6. Optimize U2D
+7. Optimize Public functions
+8. Add RAM Disk
+9. Porting FAT File System
+
+Ver 003  ----  Copy from Ver 002
+
+1. Add PIN module.
+2. Call PIN_Initial from Startup instead of from start.s
+3. Add NAND, BadBlockManagement, Flash, NTIM, Update modules in platform.
+4. Add NAND, BadBlockManagement initial in startup.c.
+5. Add Update, Load functions in main.c.
+6. Use single '_APIEntrance._s' in both OS and APP.
+7. Optimize Macro define for APIEntrance.
+8. Optimize Makefile
+9. Build common as lib
+
+Ver 002  ----  Copy from Ver 001
+
+1. Add API support.
+2. Add Exception support.
+3. Add APP: TestAPI.
+
+Ver 001  ----  Copy from HWTester
+
+1. Get a mini body with Basic functions.
+2. Change build environment from SDT to 'cygwin Linux' + 'GNU ARM GCC'.
+3. Add CPSR_Mode_SYS

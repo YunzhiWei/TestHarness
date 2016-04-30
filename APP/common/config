@@ -1,0 +1,94 @@
+##########################################################################
+# set compile variables
+
+HOST_CC     = gcc
+CROSS_      = arm-elf-
+CROSS_CC    = $(CROSS_)gcc
+CROSS_AS    = $(CROSS_)as
+CROSS_LD    = $(CROSS_)ld
+CROSS_NM    = $(CROSS_)nm
+CROSS_OBJ   = $(CROSS_)objcopy
+CROSS_DUMP  = $(CROSS_)objdump
+
+FLAG_GCC = -march=armv4 -O0 -fsigned-char 
+FLAG_INC = -I../common -I../../common -I../../inc -I../../BSP -I../../Platform -I../../MCU 
+
+##########################################################################
+# set directory variables
+
+DIR_SRC     = ./
+DIR_CMN     = ../common
+
+DIR_OBJ     = ../../_objapp
+DIR_OUT     = ../../_outapp
+
+##########################################################################
+# set output file variables
+
+FILE_LDS    = ../common/link.lds
+FILE_LOG    = $(DIR_OUT)/b.txt
+FILE_ELF    = $(DIR_OUT)/b.elf
+FILE_LST    = $(DIR_OUT)/b.lst
+FILE_MAP    = $(DIR_OUT)/b.map
+
+##########################################################################
+# set file variables
+
+LIB_GCC = \
+          C:/Program\ Files/GNUARM/lib/gcc/arm-elf/4.1.1/libgcc.a \
+          C:/Program\ Files/GNUARM/arm-elf/lib/libc.a
+
+ASM_Y = \
+              $(DIR_CMN)/start.s \
+              $(DIR_CMN)/APIStub.s 
+
+SRC_Y = \
+              $(DIR_SRC)/main.c 
+
+OBJ_Y = \
+              $(DIR_OBJ)/main.o 
+
+##########################################################################
+# make option
+
+bin :   $(FILE_BIN)
+
+lst :   $(LST_Y)
+
+dbg :   $(FILE_MAP) $(FILE_LST)
+
+all :   clr dir bin
+
+dir :
+	if [ ! -d $(DIR_OBJ) ]     ; then mkdir -p $(DIR_OBJ)    ; fi
+	if [ ! -d $(DIR_OUT) ]     ; then mkdir -p $(DIR_OUT)    ; fi
+
+clr : 
+	rm -f $(DIR_OBJ)/*
+	rm -f $(DIR_OUT)/*
+
+##########################################################################
+# create option
+
+$(FILE_BIN) : $(FILE_ELF)
+	@echo convert to binary
+	$(CROSS_OBJ) -O binary $(FILE_ELF) $(FILE_BIN)
+	@echo success!!
+
+$(FILE_ELF) : $(OBJ_Y) $(ASM_Y)
+	@echo link elf file...skip
+	$(CROSS_CC) $(FLAG_GCC) -g -nostdlib -o $@ -Xlinker -T -Xlinker $(FILE_LDS) $(ASM_Y) $(OBJ_Y) $(LIB_GCC) > $(FILE_LOG) 2>&1
+	@echo link elf file finish
+
+$(FILE_MAP) : $(FILE_ELF)
+	$(CROSS_NM) $(FILE_ELF) | sort > $(FILE_MAP)
+
+$(DIR_OBJ)/%.o : $(DIR_SRC)/%.c
+	@echo compile c file...
+	$(CROSS_CC) $(FLAG_GCC) $(FLAG_INC) -c -g -o $@ $< > $(FILE_LOG) 2>&1
+	@echo compile c file finish
+
+$(FILE_LST) : $(FILE_ELF)
+	@echo compile lst file...
+	$(CROSS_DUMP) -D -S -h -t $< > $@
+	@echo compile lst file finish

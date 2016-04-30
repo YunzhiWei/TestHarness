@@ -1,0 +1,160 @@
+;                     
+; Windows CE USB Host Setup File
+; Copyright (c) Microsoft Corporation
+;
+; WCEUSBSH.INF  -- This is the inf installation script for the stand-alone
+;                  release of serial-over-USB host driver for WCE USB Function devices.
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=WCEUSBS
+ClassGuid={25dbce51-6c8f-4a72-8a6d-b54c2b4fc835}
+Provider=%MICROSOFT%
+DriverVer=10/27/2006, 4.5.5086.0
+CatalogFile.NT=wceusbsh.cat
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[DestinationDirs]
+DefaultDestDir = 12
+NTCopyFiles = 12
+Win9xWDMFiles = 10,system32\drivers ; %windir%\SYSTEM32\DRIVERS
+
+
+[SourceDisksNames.x86]
+1 = %MediaDescription%
+
+
+[SourceDisksFiles.x86]
+wceusbsh.sys = 1
+
+
+
+[NTCopyFiles]
+wceusbsh.sys
+
+[Win9xWDMFiles]
+;wceusbsh.sys
+
+
+;
+; Class Install section
+;
+[ClassInstall]
+Addreg=Interface_ClassReg
+
+[ClassInstall32]
+Addreg=Interface_ClassReg32
+
+[Interface_ClassReg]
+HKR,,,,%Interface.ClassName%
+;HKR,,NoInstallClass,,1
+HKR,,SilentInstall,,1
+HKR,,Icon,,-20
+
+[Interface_ClassReg32]
+HKR,,,,%Interface.ClassName%
+;HKR,,NoInstallClass,,1
+HKR,,SilentInstall,,1
+HKR,,Icon,,-20
+
+
+;
+;
+;  <VENDOR SECTION>
+;
+;  1 of 3.
+;  Add your manufacturer name here (and a string definition under [strings] below)
+;
+;  e.g.
+;  %ACME%=ACME
+;
+[Manufacturer]
+%Askey% = Askey
+%Yunzhi% = Yunzhi
+
+
+;
+;  <VENDOR SECTION>
+;
+;  2 of 3.
+;  Add your manufacturer section and device entry here.
+;  Use the hardware PnP ID of your device.
+;
+;  e.g.
+;  [ACME]
+;  %USB\VID_xxxx&PID_yyyy.DeviceDesc% = Host_Inst, USB\VID_xxxx&PID_yyyy
+;
+[Askey]
+%USB\Vid_1690&Pid_0601.DeviceDesc% = Host_Inst, USB\Vid_1690&Pid_0601
+
+[Yunzhi]
+%USB\Vid_9998&Pid_6600.DeviceDesc% = Host_Inst, USB\VID_9998&PID_6600&MI_02
+
+;
+; Win 9x DDInstall section
+;
+[Host_Inst]
+Copyfiles = Win9xWDMFiles
+AddReg = Host_Win9x_AddReg
+DriverVer=10/06/2004, 4.0.4232.0
+
+[Host_Win9x_AddReg]
+HKR,,DevLoader,0,*NTKERN
+HKR,,NTMPDriver,,"wceusbsh.sys"
+
+
+;
+; Windows 2000 and XP DDInstall section
+;
+[Host_Inst.NT]
+CopyFiles=NTCopyFiles
+DriverVer=10/06/2004, 4.0.4232.0
+
+[Host_Inst.NT.Services]
+AddService = wceusbsh,0x00000002,Host_Service_Inst, Host_EventLog_Inst
+
+[Host_Service_Inst]
+DisplayName   = %Host_Inst.SVCDESC%
+ServiceType   = 1  ; SERVICE_KERNEL_DRIVER
+StartType     = 3  ; SERVICE_DEMAND_START
+ErrorControl  = 0  ; SERVICE_ERROR_IGNORE
+ServiceBinary = %12%\wceusbsh.sys
+LoadOrderGroup = Extended base
+
+[Host_EventLog_Inst]
+AddReg = Host_EventLog_AddReg
+
+[Host_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\wceusbsh.sys"
+HKR,,TypesSupported,0x00010001,7
+
+
+
+[Strings]
+;----------------------
+REG_DWORD = 0x00010001
+MICROSOFT = "Microsoft"
+
+Host_Inst.SVCDESC   = "Windows CE USB Serial Host Driver"
+Interface.ClassName = "Windows CE USB Devices"
+
+
+MediaDescription	= "Windows CE ActiveSync Media"
+
+;
+;  <VENDOR SECTION>
+;
+; 3 of 3.
+; Define your strings here
+;
+;  e.g.
+;  ACME = "ACME"
+;  USB\VID_xxxx&PID_yyyy.DeviceDesc = "ACME USB Sync"
+;
+
+Yunzhi = "Yunzhi"
+USB\Vid_9998&Pid_6600.DeviceDesc = "USB Sync 03"
+
